@@ -10,34 +10,41 @@
 </head>
 <body>
     <div id="app">
-        <h1>PHP Dischi JSON</h1>
-        <button @click="testApi">Testa Comunicazione con API</button>
-        <div v-if="message">{{ message }}</div>
+        <h1>Lista Dischi</h1>
+        <div v-if="dischi.length === 0">Caricamento...</div>
+        <div v-else>
+            <div class="album" v-for="disco in dischi" :key="disco.title">
+                <img :src="disco.poster" :alt="disco.title">
+                <h3>{{ disco.title }}</h3>
+                <p>{{ disco.author }}</p>
+                <p>{{ disco.year }}</p>
+                <p>{{ disco.genre }}</p>
+            </div>
+        </div>
     </div>
 
-    <script> 
-
+    <script>
         const App = {
             data() {
                 return {
-                    message: ''
+                    dischi: [] // array per contenere i dischi
                 };
             },
-            methods: {
-                // chiamata API
-                testApi() {
-                    axios.get('dischi.php')
-                        .then(response => {
-                            this.message = response.data.message;
-                        })
-                        .catch(error => {
-                            console.error('Errore nella chiamata API:', error);
-                        });
-                }
+            mounted() {
+                // recuperiamo i dati dall'API 
+                axios.get('dischi.php')
+                    .then(response => {
+                        this.dischi = response.data; // Imposta i dati dei dischi
+                    })
+                    // in caso di errore
+                    .catch(error => {
+                        console.error('Errore nel recupero dei dischi:', error);
+                    });
             }
         };
 
         Vue.createApp(App).mount('#app');
     </script>
+    
 </body>
 </html>

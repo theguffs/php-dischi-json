@@ -5,10 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <!-- VueJS e Axios -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    
+    <div id="app">
+        <h1>PHP Dischi JSON</h1>
+        <button @click="testApi">Testa Comunicazione con API</button>
+        <div v-if="message">{{ message }}</div>
+    </div>
+
+    <script> 
+
+        const App = {
+            data() {
+                return {
+                    message: ''
+                };
+            },
+            methods: {
+                // chiamata API
+                testApi() {
+                    axios.get('dischi.php')
+                        .then(response => {
+                            this.message = response.data.message;
+                        })
+                        .catch(error => {
+                            console.error('Errore nella chiamata API:', error);
+                        });
+                }
+            }
+        };
+
+        Vue.createApp(App).mount('#app');
+    </script>
 </body>
 </html>
